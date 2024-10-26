@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room List</title>
+    <!-- Thêm liên kết đến Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Room List</h1>
+    <a href="/rooms/new" class="btn btn-primary mb-3">Add New Room</a>
+    <div class="row">
+        <div class="col-md-4" th:each="room : ${listRooms}">
+            <div class="card mb-4">
+                <img th:src="@{/rooms/photo/{id}(id=${room.roomId})}" class="card-img-top" alt="Room Photo" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${room.roomType}"></h5>
+                    <p class="card-text">
+                        <strong>Capacity:</strong> <span th:text="${room.capacity}"></span><br>
+                        <strong>Status:</strong> <span th:text="${room.status}"></span><br>
+                        <strong>Price:</strong> $<span th:text="${room.price}"></span>
+                    </p>
+                    <a th:href="@{/rooms/edit/{id}(id=${room.roomId})}" class="btn btn-warning">Edit</a>
+                    <a th:href="@{/rooms/delete/{id}(id=${room.roomId})}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm liên kết đến Bootstrap JS và jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

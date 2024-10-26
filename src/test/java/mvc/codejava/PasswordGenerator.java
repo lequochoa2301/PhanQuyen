@@ -11,7 +11,7 @@ public class PasswordGenerator {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		// Đặt mật khẩu gốc cần mã hóa
-		String rawPassword = "admin";
+		String rawPassword = "123";//admin
 
 		// Mã hóa mật khẩu gốc bằng phương thức encode của BCryptPasswordEncoder
 		String encodedPassword = encoder.encode(rawPassword);

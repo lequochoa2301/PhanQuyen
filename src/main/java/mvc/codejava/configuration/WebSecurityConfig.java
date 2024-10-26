@@ -50,9 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests() // Bắt đầu cấu hình các yêu cầu được ủy quyền
-				.antMatchers("/student").permitAll() // Cho phép mọi người truy cập vào /student
-				.antMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR") // Chỉ cho phép ADMIN và CREATOR truy cập vào /new
-				.antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR") // Chỉ cho phép ADMIN và EDITOR truy cập vào /edit/**
+				.antMatchers("/rooms").permitAll() // Cho phép mọi người truy cập vào /student
+				.antMatchers("/new").hasAnyAuthority("ADMIN") // Chỉ cho phép ADMIN và CREATOR truy cập vào /new
+				.antMatchers("/edit/**").hasAnyAuthority("ADMIN") // Chỉ cho phép ADMIN và EDITOR truy cập vào /edit/**
 				.antMatchers("/delete/**").hasAuthority("ADMIN") // Chỉ cho phép ADMIN truy cập vào /delete/**
 				.anyRequest().authenticated() // Tất cả các yêu cầu khác phải được xác thực
 				.and()

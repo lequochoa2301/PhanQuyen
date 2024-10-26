@@ -12,37 +12,34 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// Lớp MyUserDetails triển khai giao diện UserDetails của Spring Security
+
 public class MyUserDetails implements UserDetails {
 
-	private User user; // Đối tượng người dùng được lưu trữ
+	private User user;
 
-	// Constructor để khởi tạo MyUserDetails với một đối tượng User
 	public MyUserDetails(User user) {
-		this.user = user; // Gán đối tượng User cho thuộc tính user
+		this.user = user;
 	}
 
-	// Phương thức trả về danh sách quyền của người dùng
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<Role> roles = user.getRoles(); // Lấy tập hợp các vai trò của người dùng
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>(); // Khởi tạo danh sách quyền
+		Set<Role> roles = user.getRoles();
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-		// Duyệt qua từng vai trò và thêm vào danh sách quyền
 		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getName())); // Thêm quyền vào danh sách
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
 
-		return authorities; // Trả về danh sách quyền
+		return authorities;
 	}
 
-	// Phương thức trả về mật khẩu của người dùng
 	@Override
 	public String getPassword() {
-		return user.getPassword(); // Trả về mật khẩu
+		return user.getPassword();
 	}
 
-	// Phương thức trả về tên người dùng
+
 	@Override
 	public String getUsername() {
 		return user.getUsername(); // Trả về tên người dùng
@@ -51,22 +48,20 @@ public class MyUserDetails implements UserDetails {
 	// Phương thức kiểm tra xem tài khoản đã hết hạn hay chưa
 	@Override
 	public boolean isAccountNonExpired() {
-		return true; // Luôn trả về true, nghĩa là tài khoản không hết hạn
+		return true;
 	}
 
-	// Phương thức kiểm tra xem tài khoản có bị khóa hay không
 	@Override
 	public boolean isAccountNonLocked() {
-		return true; // Luôn trả về true, nghĩa là tài khoản không bị khóa
+		return true;
 	}
 
-	// Phương thức kiểm tra xem thông tin xác thực có hết hạn hay không
+
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true; // Luôn trả về true, nghĩa là thông tin xác thực không hết hạn
+		return true;
 	}
 
-	// Phương thức kiểm tra xem tài khoản có được kích hoạt hay không
 	@Override
 	public boolean isEnabled() {
 		return user.isEnabled(); // Trả về trạng thái kích hoạt của người dùng
