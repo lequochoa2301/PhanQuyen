@@ -6,7 +6,7 @@ import mvc.codejava.repository.RoomRepository;
 import mvc.codejava.repository.UserRepository;
 import mvc.codejava.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,71 +26,78 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping("/rooms")
+    // Phương thức cho phép tất cả người dùng xem danh sách phòng
+    @RequestMapping("/rooms")
     public String viewHomePage(Model model) {
         List<Room> listRooms = roomService.list();
         model.addAttribute("listRooms", listRooms);
-        return "room_list"; // Tên của trang HTML để hiển thị danh sách phòng
-    }
-    // Hiển thị form tạo phòng mới
-    @GetMapping("/new")
-    public String showNewRoomForm(Model model) {
-        model.addAttribute("room", new Room());
-        return "new_room"; // Tên của trang HTML để tạo phòng mới
+        return "room_list";
     }
 
-    // Lưu phòng mới
-    @PostMapping("/save")
+    // Chỉ ADMIN mới có quyền truy cập vào form tạo phòng
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/rooms/new")
+    public String showNewRoomForm(Model model) {
+        model.addAttribute("room", new Room());
+        return "new_room";
+    }
+
+    // Chỉ ADMIN mới có quyền lưu phòng mới
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/rooms/save")
     public String saveRoom(@ModelAttribute("room") Room room,
                            @RequestParam("photoFile") MultipartFile photoFile) {
         if (!photoFile.isEmpty()) {
             try {
-                room.setPhoto(photoFile.getBytes()); // Lưu hình ảnh vào thuộc tính photo
+                room.setPhoto(photoFile.getBytes());
             } catch (IOException e) {
-                e.printStackTrace(); // Xử lý lỗi đọc file
+                e.printStackTrace();
             }
         }
         roomService.save(room);
-        return "redirect:/rooms"; // Quay về danh sách phòng sau khi lưu
+        return "redirect:/rooms";
     }
 
-    // Hiển thị form chỉnh sửa phòng
-    @GetMapping("/edit/{id}")
+    // Chỉ ADMIN mới có quyền chỉnh sửa phòng
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/rooms/edit/{id}")
     public String showEditRoomForm(@PathVariable("id") Long id, Model model) {
         Room room = roomService.get(id);
         model.addAttribute("room", room);
-        return "edit_room"; // Tên của trang HTML để chỉnh sửa phòng
+        return "edit_room";
     }
 
-    // Cập nhật phòng
-    @PostMapping("/update/{id}")
+    // Chỉ ADMIN mới có quyền cập nhật phòng
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/rooms/update/{id}")
     public String updateRoom(@PathVariable("id") Long id,
                              @ModelAttribute("room") Room room,
                              @RequestParam("photoFile") MultipartFile photoFile) {
         if (!photoFile.isEmpty()) {
             try {
-                room.setPhoto(photoFile.getBytes()); // Cập nhật hình ảnh nếu có file mới
+                room.setPhoto(photoFile.getBytes());
             } catch (IOException e) {
-                e.printStackTrace(); // Xử lý lỗi đọc file
+                e.printStackTrace();
             }
         }
-        room.setRoomId(id); // Đặt ID của phòng trước khi lưu
+        room.setRoomId(id);
         roomService.save(room);
-        return "redirect:/rooms"; // Quay về danh sách phòng sau khi cập nhật
+        return "redirect:/rooms";
     }
 
-    // Xóa phòng
-    @GetMapping("/delete/{id}")
+    // Chỉ ADMIN mới có quyền xóa phòng
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/rooms/delete/{id}")
     public String deleteRoom(@PathVariable("id") Long id) {
         roomService.delete(id);
-        return "redirect:/rooms"; // Quay về danh sách phòng sau khi xóa
+        return "redirect:/rooms";
     }
 
-    // Lấy hình ảnh của phòng
-    @GetMapping("/photo/{id}")
+    // Cho phép tất cả người dùng truy cập để lấy ảnh phòng
+    @RequestMapping("/rooms/photo/{id}")
     @ResponseBody
     public byte[] getRoomPhoto(@PathVariable Long id) {
         Room room = roomService.get(id);
-        return room.getPhoto(); // Trả về hình ảnh dưới dạng byte[]
+        return room.getPhoto();
     }
 }
