@@ -1,12 +1,12 @@
-package mvc.codejava.service; // Gói chứa lớp dịch vụ cho ứng dụng
+package mvc.codejava.service;
 
-import mvc.codejava.configuration.MyUserDetails; // Nhập lớp MyUserDetails để sử dụng cho việc tạo đối tượng UserDetails
-import mvc.codejava.entity.User; // Nhập lớp User để thao tác với đối tượng người dùng
-import mvc.codejava.repository.UserRepository; // Nhập lớp UserRepository để truy cập dữ liệu người dùng
-import org.springframework.beans.factory.annotation.Autowired; // Nhập annotation để tự động tiêm phụ thuộc
-import org.springframework.security.core.userdetails.UserDetails; // Nhập lớp UserDetails từ Spring Security
-import org.springframework.security.core.userdetails.UserDetailsService; // Nhập lớp UserDetailsService để tạo lớp dịch vụ cho người dùng
-import org.springframework.security.core.userdetails.UsernameNotFoundException; // Nhập exception để xử lý khi không tìm thấy người dùng
+import mvc.codejava.configuration.MyUserDetails;
+import mvc.codejava.entity.User;
+import mvc.codejava.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 public class UserDetailsServiceImpl implements UserDetailsService {

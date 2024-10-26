@@ -26,7 +26,6 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    // Phương thức cho phép tất cả người dùng xem danh sách phòng
     @RequestMapping("/rooms")
     public String viewHomePage(Model model) {
         List<Room> listRooms = roomService.list();
@@ -34,7 +33,6 @@ public class RoomController {
         return "room_list";
     }
 
-    // Chỉ ADMIN mới có quyền truy cập vào form tạo phòng
     @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/new")
     public String showNewRoomForm(Model model) {
@@ -42,7 +40,6 @@ public class RoomController {
         return "new_room";
     }
 
-    // Chỉ ADMIN mới có quyền lưu phòng mới
     @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/save")
     public String saveRoom(@ModelAttribute("room") Room room,
@@ -58,7 +55,6 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
-    // Chỉ ADMIN mới có quyền chỉnh sửa phòng
     @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/edit/{id}")
     public String showEditRoomForm(@PathVariable("id") Long id, Model model) {
@@ -67,7 +63,6 @@ public class RoomController {
         return "edit_room";
     }
 
-    // Chỉ ADMIN mới có quyền cập nhật phòng
     @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/update/{id}")
     public String updateRoom(@PathVariable("id") Long id,
@@ -85,7 +80,13 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
-    // Chỉ ADMIN mới có quyền xóa phòng
+    @RequestMapping("/rooms/photo/{id}")
+    @ResponseBody
+    public byte[] getRoomPhoto(@PathVariable Long id) {
+        Room room = roomService.get(id);
+        return room.getPhoto();
+    }
+
     @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/delete/{id}")
     public String deleteRoom(@PathVariable("id") Long id) {
@@ -93,11 +94,4 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
-    // Cho phép tất cả người dùng truy cập để lấy ảnh phòng
-    @RequestMapping("/rooms/photo/{id}")
-    @ResponseBody
-    public byte[] getRoomPhoto(@PathVariable Long id) {
-        Room room = roomService.get(id);
-        return room.getPhoto();
-    }
 }

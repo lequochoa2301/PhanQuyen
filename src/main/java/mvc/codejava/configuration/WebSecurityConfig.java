@@ -42,15 +42,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/rooms").permitAll() // Cho phép tất cả truy cập vào /rooms
+				.antMatchers("/rooms").permitAll()
 				.antMatchers("/rooms/new", "/rooms/save", "/rooms/edit/**", "/rooms/update/**", "/rooms/delete/**")
-				.hasRole("ADMIN") // Chỉ ADMIN mới có quyền truy cập các URL này
-				.anyRequest().authenticated() // Tất cả các yêu cầu khác phải được xác thực
+				.hasRole("ADMIN")
+				.anyRequest().authenticated()
 				.and()
 				.formLogin().permitAll()
 				.and()
 				.logout().permitAll()
 				.and()
-				.exceptionHandling().accessDeniedPage("/403"); // Trang 403 khi bị từ chối truy cập
+				.exceptionHandling().accessDeniedPage("/403");
 	}
 }

@@ -1,6 +1,5 @@
 package mvc.codejava.configuration;
 
-// Nhập các lớp cần thiết từ các gói khác
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,10 +41,9 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getUsername(); // Trả về tên người dùng
+		return user.getUsername();
 	}
 
-	// Phương thức kiểm tra xem tài khoản đã hết hạn hay chưa
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
