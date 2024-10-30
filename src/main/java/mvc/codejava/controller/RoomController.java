@@ -1,7 +1,6 @@
 package mvc.codejava.controller;
 
 import mvc.codejava.entity.Room;
-import mvc.codejava.entity.User;
 import mvc.codejava.repository.RoomRepository;
 import mvc.codejava.repository.UserRepository;
 import mvc.codejava.service.RoomService;
@@ -26,21 +25,22 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @RequestMapping("/rooms")
+    @RequestMapping("/")
     public String viewHomePage(Model model) {
+
         List<Room> listRooms = roomService.list();
         model.addAttribute("listRooms", listRooms);
         return "room_list";
     }
 
-    @Secured("ROLE_ADMIN")
+
     @RequestMapping("/rooms/new")
     public String showNewRoomForm(Model model) {
         model.addAttribute("room", new Room());
         return "new_room";
     }
 
-    @Secured("ROLE_ADMIN")
+
     @RequestMapping("/rooms/save")
     public String saveRoom(@ModelAttribute("room") Room room,
                            @RequestParam("photoFile") MultipartFile photoFile) {
@@ -55,7 +55,7 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
-    @Secured("ROLE_ADMIN")
+
     @RequestMapping("/rooms/edit/{id}")
     public String showEditRoomForm(@PathVariable("id") Long id, Model model) {
         Room room = roomService.get(id);
@@ -63,7 +63,6 @@ public class RoomController {
         return "edit_room";
     }
 
-    @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/update/{id}")
     public String updateRoom(@PathVariable("id") Long id,
                              @ModelAttribute("room") Room room,
@@ -87,7 +86,6 @@ public class RoomController {
         return room.getPhoto();
     }
 
-    @Secured("ROLE_ADMIN")
     @RequestMapping("/rooms/delete/{id}")
     public String deleteRoom(@PathVariable("id") Long id) {
         roomService.delete(id);

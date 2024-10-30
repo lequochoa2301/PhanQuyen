@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,11 @@
 </head>
 <body>
 <div class="container">
+    <div sec:authorize="isAuthenticated()">
+        Welcome <b><span sec:authentication="name">Username</span></b>
+        &nbsp;
+        <i><span sec:authentication="principal.authorities">Roles</span></i>
+    </div>
     <!-- Header với nút Log Out -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <h1>Room List</h1>

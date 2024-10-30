@@ -39,18 +39,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.authenticationProvider(authenticationProvider());
 	}
 
+
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/rooms").permitAll()
-				.antMatchers("/rooms/new", "/rooms/save", "/rooms/edit/**", "/rooms/update/**", "/rooms/delete/**")
-				.hasRole("ADMIN")
+				.antMatchers("/").permitAll()
+				.antMatchers("/rooms/**").hasAnyAuthority("ADMIN", "CREATOR")
+				.antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR")
+				.antMatchers("/delete/**").hasAuthority("ADMIN")
 				.anyRequest().authenticated()
 				.and()
 				.formLogin().permitAll()
 				.and()
 				.logout().permitAll()
 				.and()
-				.exceptionHandling().accessDeniedPage("/403");
+				.exceptionHandling().accessDeniedPage("/403")
+		;
 	}
 }
