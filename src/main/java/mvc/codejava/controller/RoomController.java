@@ -25,9 +25,8 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @RequestMapping("/")
+    @RequestMapping("/rooms")
     public String viewHomePage(Model model) {
-
         List<Room> listRooms = roomService.list();
         model.addAttribute("listRooms", listRooms);
         return "room_list";
@@ -63,27 +62,58 @@ public class RoomController {
         return "edit_room";
     }
 
-    @RequestMapping("/rooms/update/{id}")
-    public String updateRoom(@PathVariable("id") Long id,
-                             @ModelAttribute("room") Room room,
-                             @RequestParam("photoFile") MultipartFile photoFile) {
+//    @RequestMapping("/rooms/update/{id}")
+//    public String updateRoom(@PathVariable("id") Long id,
+//                             @ModelAttribute("room") Room room,
+//                             @RequestParam("photoFile") MultipartFile photoFile) {
+//        if (!photoFile.isEmpty()) {
+//            try {
+//                room.setPhoto(photoFile.getBytes());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        room.setRoomId(id);
+//        roomService.save(room);
+//        return "redirect:/rooms";
+//    }
+//
+//    @RequestMapping("/rooms/photo/{id}")
+//    @ResponseBody
+//    public byte[] getRoomPhoto(@PathVariable Long id) {
+//        Room room = roomService.get(id);
+//        return room.getPhoto();
+//    }
+
+
+    @PostMapping("/rooms/update/{id}")
+    public String updateRoom(
+            @PathVariable("id") Long id,
+            @ModelAttribute("room") Room updatedRoom,
+            @RequestParam("photoFile") MultipartFile photoFile) {
+
+        // Tìm room hiện tại trong database
+        Room existingRoom = roomService.get(id);
+
+        // Cập nhật các thuộc tính từ form
+        existingRoom.setRoomType(updatedRoom.getRoomType());
+        existingRoom.setCapacity(updatedRoom.getCapacity());
+        existingRoom.setStatus(updatedRoom.getStatus());
+        existingRoom.setPrice(updatedRoom.getPrice());
+
+        // Kiểm tra nếu có file ảnh mới
         if (!photoFile.isEmpty()) {
             try {
-                room.setPhoto(photoFile.getBytes());
+                existingRoom.setPhoto(photoFile.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
+                // Thêm xử lý lỗi nếu cần
             }
         }
-        room.setRoomId(id);
-        roomService.save(room);
-        return "redirect:/rooms";
-    }
 
-    @RequestMapping("/rooms/photo/{id}")
-    @ResponseBody
-    public byte[] getRoomPhoto(@PathVariable Long id) {
-        Room room = roomService.get(id);
-        return room.getPhoto();
+        // Lưu room đã cập nhật vào database
+        roomService.save(existingRoom);
+        return "redirect:/rooms";
     }
 
     @RequestMapping("/rooms/delete/{id}")

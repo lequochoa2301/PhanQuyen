@@ -10,13 +10,36 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
 
-    private String roomType; // loại phòng
-    private int capacity; // số người tối đa
-    private String status; // tình trạng phòng
-    private Double price; // giá cả
+    @Column(name = "number_of_rooms")
+    private int numberOfRooms; // Số phòng
+
+    @Column(name = "room_type", nullable = false)
+    private String roomType; // Loại phòng
+
+    @Column(name = "capacity")
+    private int capacity; // Số người tối đa
+
+    @Column(name = "status", nullable = false)
+    private String status; // Tình trạng phòng
+
+    @Column(name = "price", nullable = false)
+    private Double price; // Giá cả
 
     @Lob
-    private byte[] photo; // hình ảnh
+    @Column(name = "photo", columnDefinition = "BLOB")
+    private byte[] photo; // Hình ảnh
+
+    public Room() {
+    }
+
+    public Room(int numberOfRooms, String roomType, int capacity, String status, Double price, byte[] photo) {
+        this.numberOfRooms = numberOfRooms;
+        this.roomType = roomType;
+        this.capacity = capacity;
+        this.status = status;
+        this.price = price;
+        this.photo = photo;
+    }
 
     public Long getRoomId() {
         return roomId;
@@ -24,6 +47,14 @@ public class Room {
 
     public void setRoomId(Long roomId) {
         this.roomId = roomId;
+    }
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
 
     public String getRoomType() {

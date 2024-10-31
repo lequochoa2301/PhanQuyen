@@ -4,46 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room List</title>
-    <!-- Thêm liên kết đến Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <div sec:authorize="isAuthenticated()">
-        Welcome <b><span sec:authentication="name">Username</span></b>
-        &nbsp;
-        <i><span sec:authentication="principal.authorities">Roles</span></i>
-    </div>
-    <!-- Header với nút Log Out -->
+    <!-- Header with Log Out button -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <h1>Room List</h1>
         <form th:action="@{/logout}" method="post" class="mb-0">
             <button type="submit" class="btn btn-secondary">Log Out</button>
         </form>
     </div>
-
-    <a href="/rooms/new" class="btn btn-primary mb-3">Add New Room</a>
+    <div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+        <a href="/rooms/new" class="btn btn-primary mb-3">Add New Room</a>
+    </div>
 
     <div class="row">
         <div class="col-md-4" th:each="room : ${listRooms}">
             <div class="card mb-4">
-                <img th:src="@{/rooms/photo/{id}(id=${room.roomId})}" class="card-img-top" alt="Room Photo" style="height: 200px; object-fit: cover;">
+                <img th:src="@{'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(room.photo)}}" class="card-img-top" alt="Room Photo" style="height: 200px; object-fit: cover;">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${room.roomType}"></h5>
                     <p class="card-text">
+                        <strong>Number of Rooms:</strong> <span th:text="${room.numberOfRooms}"></span><br>
                         <strong>Capacity:</strong> <span th:text="${room.capacity}"></span><br>
                         <strong>Status:</strong> <span th:text="${room.status}"></span><br>
                         <strong>Price:</strong> $<span th:text="${room.price}"></span>
                     </p>
-                    <a th:href="@{/rooms/edit/{id}(id=${room.roomId})}" class="btn btn-warning">Edit</a>
-                    <a th:href="@{/rooms/delete/{id}(id=${room.roomId})}" class="btn btn-danger">Delete</a>
+                    <div sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                        <a th:href="@{/rooms/edit/{id}(id=${room.roomId})}" class="btn btn-warning">Edit</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a th:href="@{/rooms/delete/{id}(id=${room.roomId})}" class="btn btn-danger">Delete</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Thêm liên kết đến Bootstrap JS và jQuery -->
+<!-- Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
